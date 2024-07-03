@@ -1,8 +1,6 @@
 use anyhow::Context;
 use clap::Parser;
-use image::{
-    codecs::png::PngEncoder, ColorType, ExtendedColorType, ImageBuffer, ImageEncoder, Rgba,
-};
+use image::{codecs::png::PngEncoder, ExtendedColorType, ImageEncoder};
 use psd::Psd;
 use std::{
     fs,
@@ -52,14 +50,6 @@ fn psd_to_png(data: Vec<u8>) -> anyhow::Result<Vec<u8>> {
     let height = psd.height();
 
     let pixels = psd.rgba();
-    let pixels_len = pixels.len();
-    if pixels_len != (width * height * 4) as usize {
-        return Err(anyhow::anyhow!(
-            "Expected {} pixels, got {}",
-            width * height,
-            pixels_len / 4
-        ));
-    }
 
     let mut png = Vec::new();
     PngEncoder::new(&mut png)
