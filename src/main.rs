@@ -2,6 +2,7 @@ use anyhow::Context;
 use clap::Parser;
 use image::{codecs::png::PngEncoder, ExtendedColorType, ImageEncoder};
 use psd::Psd;
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use std::{
     fs,
     path::{Path, PathBuf},
@@ -18,16 +19,19 @@ fn main() -> anyhow::Result<()> {
     let args = Cli::parse();
 
     let current_dir = args.path.unwrap_or_else(|| PathBuf::from("."));
-    let walk = WalkDir::new(current_dir).into_iter().filter_map(|e| e.ok());
+    let walk = WalkDir::new(current_dir)
+        .into_iter()
+        .filter_map(|e| e.ok())
+        .collect::<Vec<_>>();
 
-    for entry in walk {
+    walk.par_iter().for_each(|entry| {
         if entry.path().extension().and_then(|s| s.to_str()) == Some("psd") {
             match run_file(entry.path()) {
                 Ok(_) => println!("Converted {:?}", entry.path()),
                 Err(e) => eprintln!("Failed to convert {:?}: {}", entry.path(), e),
             }
         }
-    }
+    });
 
     Ok(())
 }
