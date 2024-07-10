@@ -11,7 +11,7 @@ use walkdir::WalkDir;
 
 #[derive(Parser)]
 struct Cli {
-    #[arg(short, long)]
+    #[arg()]
     path: Option<PathBuf>,
 }
 
