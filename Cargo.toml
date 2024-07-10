@@ -2,6 +2,12 @@
 name = "psd-to-png"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+authors = ["Jack T <jack@jackt.space>"]
+description = "CLI tool to convert PSD files to PNGs"
+repository = "https://github.com/jacktabscode/psd-to-png"
+homepage = "https://github.com/jacktabscode/psd-to-png"
+readme = "README.md"
 
 [dependencies]
 anyhow = "1.0.86"
